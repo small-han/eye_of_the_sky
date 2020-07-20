@@ -2,7 +2,7 @@
 import cv2
 import numpy as np
 import time
-import stereoconfig
+import Stereoconfig
 
 class steroMeasure():
     def __init__(self):
@@ -11,7 +11,13 @@ class steroMeasure():
         self.Q = 0  # 右图
         self.config = stereoconfig.stereoCamera1() # load camera config
 
-    def setInput(self,iml,imr):
+    def setInputArray(self,iml,imr):
+        self.iml = iml   # 左图
+        self.imr = imr   # 右图
+        height, width = self.iml.shape[0:2]
+        map1x, map1y, map2x, map2y, self.Q= self.getRectifyTransform(height, width, self.config)  # 获取用于畸变校正和立体校正的映射矩阵以及用于计算像素空间坐标的重投影矩阵
+
+    def setInputPath(self,iml,imr):
         self.iml = cv2.imread(iml)   # 左图
         self.imr = cv2.imread(imr)   # 右图
         height, width = self.iml.shape[0:2]
@@ -46,7 +52,6 @@ class steroMeasure():
         map1x, map1y = cv2.initUndistortRectifyMap(left_K, left_distortion, R1, P1, (width, height), cv2.CV_32FC1)
         map2x, map2y = cv2.initUndistortRectifyMap(right_K, right_distortion, R2, P2, (width, height), cv2.CV_32FC1)
         return map1x, map1y, map2x, map2y, Q
-    
     
     # 畸变校正和立体校正
     def rectifyImage(self, image1, image2, map1x, map1y, map2x, map2y):
@@ -99,10 +104,11 @@ class steroMeasure():
         msg = cv2.imwrite('./out.png', disp)
         # 计算像素点的3D坐标（左相机坐标系下）
         points_3d = cv2.reprojectImageTo3D(disp, self.Q)  # 可以使用上文的stereo_config.py给出的参数
+        return points_3d // return location
 
 if __name__ == '__main__':
     node = steroMeasure()
-    node.setInput("./data/aloeL.jpg","./data/aloeR.jpg")
+    node.setInputPath("./data/aloeL.jpg","./data/aloeR.jpg")
     s = time.time()
     for i in range(10):
         node.run()
