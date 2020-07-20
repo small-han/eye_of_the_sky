@@ -2,7 +2,7 @@
 import cv2
 import numpy as np
 import time
-import Stereoconfig
+import stereoconfig
 
 class steroMeasure():
     def __init__(self):
@@ -104,7 +104,7 @@ class steroMeasure():
         msg = cv2.imwrite('./out.png', disp)
         # 计算像素点的3D坐标（左相机坐标系下）
         points_3d = cv2.reprojectImageTo3D(disp, self.Q)  # 可以使用上文的stereo_config.py给出的参数
-        return points_3d // return location
+        return points_3d # return location
 
 if __name__ == '__main__':
     node = steroMeasure()

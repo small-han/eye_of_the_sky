@@ -1,3 +1,4 @@
+"""
 from test1 import Detection
 import time
 My_Detection=Detection(width=720,height=480)
@@ -10,3 +11,8 @@ while True:
     My_Detection.Save_Data("./log.txt",my_detections)
     print("time:"+str(time.time()-time_before))
     a=input()
+"""
+import cv2
+cap1=cv2.VideoCapture(0)
+ret,frame=cap1.read()
+cv2.imwrite("out1.jpg",frame)
