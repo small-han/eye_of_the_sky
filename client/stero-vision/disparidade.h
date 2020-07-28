@@ -22,10 +22,14 @@ using namespace cv::xfeatures2d;
 
 class disparidade {
 public:
+    disparidade();
     disparidade(Mat& actualOne, Mat& actualTwo);
     ~disparidade();
     
     void iniciaDisparidade(); //Loads calibration and rectification data
+    void setInput(Mat& l, Mat& r){m_imageRight = r.clone(); m_imageLeft= l.clone();}; //set input l/r images
+    void getDisparity();
+    void get3DLocation(Mat& Location3D){Location3D = XYZ3D.clone();}; //Obtain 3D Locations
 
 private: 
     void retificaParaDisparidade(Mat map1x, Mat map1y, Mat map2x, Mat map2y); //Uses saved calibration and rectification data to rectify the images to the Disparity Map.
@@ -57,14 +61,17 @@ private:
     Mat left_disp, right_disp, filtered_disp, conf_map;
     
     cv::Mat filtered_disp_vis, raw_disp_vis;
+    Mat R1, R2, P1, P2, Q;
+    Mat map1x, map1y, map2x, map2y;
     Mat imgCalorHSV, imgCalorJET, imgAdd, imgBONE, imgHOT;
+    cv::Mat XYZ3D;
     
-    cv::VideoWriter videoOutDispatiryJET;
-    cv::VideoWriter videoOutDisparityHSV;
-    cv::VideoWriter videoOutDisparityBONE;
-    cv::VideoWriter videoOutDisparityHOT;
-    cv::VideoWriter videoOutOriginalOne;
-    cv::VideoWriter videoOutOriginalTwo;
+    // cv::VideoWriter videoOutDispatiryJET;
+    // cv::VideoWriter videoOutDisparityHSV;
+    // cv::VideoWriter videoOutDisparityBONE;
+    // cv::VideoWriter videoOutDisparityHOT;
+    // cv::VideoWriter videoOutOriginalOne;
+    // cv::VideoWriter videoOutOriginalTwo;
     
 };
 

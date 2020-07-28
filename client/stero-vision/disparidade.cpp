@@ -5,31 +5,31 @@
 disparidade::disparidade(Mat& actualOne, Mat& actualTwo) : m_imageRight(actualOne), m_imageLeft(actualTwo) {
     /*To save the Disparity Map in different views.*/
     //videoOutDispatiryJET = cv::VideoWriter("/media/thiago/Lobinho/outDispatiryJET.avi",CV_FOURCC('M','J','P','G'), 10, Size(352,288),true);
-    videoOutDisparityHSV = cv::VideoWriter("outDispatiryHSV.avi",CV_FOURCC('M','J','P','G'), 10, Size(352,288),true);
-    videoOutDisparityBONE = cv::VideoWriter("outDispatiryHSV.avi",CV_FOURCC('M','J','P','G'), 10, Size(352,288),true);
-    videoOutDisparityHOT = cv::VideoWriter("outDispatiryHSV.avi",CV_FOURCC('M','J','P','G'), 10, Size(352,288),true);
-    videoOutOriginalOne = cv::VideoWriter("outTestDMDOne.avi",CV_FOURCC('M','J','P','G'), 10, Size(352,288),true);
-    videoOutOriginalTwo = cv::VideoWriter("outTestDMDTwo.avi",CV_FOURCC('M','J','P','G'), 10, Size(352,288),true);
+    // videoOutDisparityHSV = cv::VideoWriter("outDispatiryHSV.avi",CV_FOURCC('M','J','P','G'), 10, Size(352,288),true);
+    // videoOutDisparityBONE = cv::VideoWriter("outDispatiryHSV.avi",CV_FOURCC('M','J','P','G'), 10, Size(352,288),true);
+    // videoOutDisparityHOT = cv::VideoWriter("outDispatiryHSV.avi",CV_FOURCC('M','J','P','G'), 10, Size(352,288),true);
+    // videoOutOriginalOne = cv::VideoWriter("outTestDMDOne.avi",CV_FOURCC('M','J','P','G'), 10, Size(352,288),true);
+    // videoOutOriginalTwo = cv::VideoWriter("outTestDMDTwo.avi",CV_FOURCC('M','J','P','G'), 10, Size(352,288),true);
 
-    if (!videoOutDisparityBONE.isOpened())
-    {
-        std::cout << "Could not save the video." << std::endl;
-    }
+    // if (!videoOutDisparityBONE.isOpened())
+    // {
+    //     std::cout << "Could not save the video." << std::endl;
+    // }
     
-    if (!videoOutDisparityHOT.isOpened())
-    {
-        std::cout << "Could not save the video." << std::endl;
-    }
+    // if (!videoOutDisparityHOT.isOpened())
+    // {
+    //     std::cout << "Could not save the video." << std::endl;
+    // }
     
-    if (!videoOutOriginalOne.isOpened())
-    {
-        std::cout << "Could not save the video." << std::endl;
-    }
+    // if (!videoOutOriginalOne.isOpened())
+    // {
+    //     std::cout << "Could not save the video." << std::endl;
+    // }
     
-    if (!videoOutOriginalTwo.isOpened())
-    {
-        std::cout << "Could not save the video." << std::endl;
-    }
+    // if (!videoOutOriginalTwo.isOpened())
+    // {
+    //     std::cout << "Could not save the video." << std::endl;
+    // }
 }
 
 disparidade::~disparidade() {
@@ -74,9 +74,9 @@ void disparidade::iniciaDisparidade(){
     Mat D1, D2; //Calibration
     Mat R, T, E, F; //Calibration
     
-    Mat R1, R2, P1, P2, Q; //Rectification
+    // Mat R1, R2, P1, P2, Q; //Rectification
     
-    FileStorage fs("mystereocalib.yml", FileStorage::READ);
+    FileStorage fs("config/mystereocalib.yml", FileStorage::READ);
     fs["CM1"] >> CM1;
     fs["CM2"] >> CM2;
     fs["D1"] >> D1;
@@ -97,7 +97,7 @@ void disparidade::iniciaDisparidade(){
     
     cout << "Applying Undistort..." << endl;
     
-    Mat map1x, map1y, map2x, map2y;
+
     
     initUndistortRectifyMap(CM1, D1, R1, P1, img1.size(), CV_32FC1, map1x, map1y);
     initUndistortRectifyMap(CM2, D2, R2, P2, img2.size(), CV_32FC1, map2x, map2y);
@@ -105,8 +105,13 @@ void disparidade::iniciaDisparidade(){
     cout << "Undistort completed" << endl;
     
     //It rectifies the images by passing the parameters with the necessary information.
-    retificaParaDisparidade(map1x, map1y, map2x, map2y);
+    // retificaParaDisparidade(map1x, map1y, map2x, map2y);
         
+}
+
+void disparidade::getDisparity()
+{
+    retificaParaDisparidade(map1x, map1y, map2x, map2y);
 }
 
 /* Receives the necessary calibration and rectification information and finalizes
@@ -115,63 +120,60 @@ void disparidade::iniciaDisparidade(){
 void disparidade::retificaParaDisparidade(Mat map1x, Mat map1y, Mat map2x, Mat map2y){
     
     Mat imgRectify, imgOne, imgTwo;
-    int k;
-    char key;
+    imgOne = m_imageRight.clone();
+    imgTwo = m_imageLeft.clone();
+    
+    cvtColor(imgOne, imgOne, COLOR_BGR2RGB);
+    cvtColor(imgTwo, imgTwo, COLOR_BGR2RGB);
+    
+    remap(imgOne, imgU1, map1x, map1y, INTER_LINEAR, BORDER_CONSTANT, Scalar());
+    remap(imgTwo, imgU2, map2x, map2y, INTER_LINEAR, BORDER_CONSTANT, Scalar());
         
-    while(1){
-        imgOne = m_imageRight.clone();
-        imgTwo = m_imageLeft.clone();
-        
-        cvtColor(imgOne, imgOne, COLOR_BGR2RGB);
-        cvtColor(imgTwo, imgTwo, COLOR_BGR2RGB);
-        
-        remap(imgOne, imgU1, map1x, map1y, INTER_LINEAR, BORDER_CONSTANT, Scalar());
-        remap(imgTwo, imgU2, map2x, map2y, INTER_LINEAR, BORDER_CONSTANT, Scalar());
-          
-        /* Rectification View:
-         * If you want to check if the loaded rectification is correct.
-         *
-        // To display the rectified images
-        imgRectify = Mat::zeros(imgU1.rows, imgU1.cols*2+10, imgU1.type());
-        
-        imgU1.copyTo(imgRectify(Range::all(), Range(0, imgU2.cols)));
-        imgU2.copyTo(imgRectify(Range::all(), Range(imgU2.cols+10, imgU2.cols*2+10)));
-        
-        //If it gets too large to fit on the screen, it is scaled down, by 2, to fit.
-        if(imgRectify.cols > 1920){
-            resize(imgRectify, imgRectify, Size(imgRectify.cols/2, imgRectify.rows/2));
-        } 
-        //To draw the lines in the rectified image
-        for(int j = 0; j < imgRectify.rows; j += 16){
-            Point p1 = Point(0,j);
-            Point p2 = Point(imgRectify.cols*2,j);
-            line(imgRectify, p1, p2, CV_RGB(255,0,0));
-        }
-        
-        imshow("Rectified image", imgRectify);*/
-        
-        //These are grayscale images that will be used in the DM.
-        Mat grayDisp1, grayDisp2;        
-        
-        cvtColor(imgU1, grayDisp1, CV_RGB2GRAY);
-        cvtColor(imgU2, grayDisp2, CV_RGB2GRAY);
-        
-        imwrite("left.ppm", grayDisp1);
-        imwrite("right.ppm", grayDisp2);
-        
-        //constroiMapaDisparidadeBM(imgU1, imgU2);
-        //constroiMapaDisparidadeSGBM(imgU1, imgU2);
-        constroiMDFiltro(grayDisp1, grayDisp2); //with grayscale images
-        //constroiMDFiltro(imgU1, imgU2); //with rgb images
-        
-        k = waitKey(5);
-        key = (char) waitKey(5);
-        
-        if(key==27){
-            break;
-        }
+    /* Rectification View:
+        * If you want to check if the loaded rectification is correct.
+        *
+    // To display the rectified images
+    imgRectify = Mat::zeros(imgU1.rows, imgU1.cols*2+10, imgU1.type());
+    
+    imgU1.copyTo(imgRectify(Range::all(), Range(0, imgU2.cols)));
+    imgU2.copyTo(imgRectify(Range::all(), Range(imgU2.cols+10, imgU2.cols*2+10)));
+    
+    //If it gets too large to fit on the screen, it is scaled down, by 2, to fit.
+    if(imgRectify.cols > 1920){
+        resize(imgRectify, imgRectify, Size(imgRectify.cols/2, imgRectify.rows/2));
+    } 
+    //To draw the lines in the rectified image
+    for(int j = 0; j < imgRectify.rows; j += 16){
+        Point p1 = Point(0,j);
+        Point p2 = Point(imgRectify.cols*2,j);
+        line(imgRectify, p1, p2, CV_RGB(255,0,0));
     }
+    
+    imshow("Rectified image", imgRectify);*/
+    
+    //These are grayscale images that will be used in the DM.
+    Mat grayDisp1, grayDisp2;        
+    
+    cvtColor(imgU1, grayDisp1, CV_RGB2GRAY);
+    cvtColor(imgU2, grayDisp2, CV_RGB2GRAY);
+    
+    // imwrite("left.ppm", grayDisp1);
+    // imwrite("right.ppm", grayDisp2);
+    
+    //constroiMapaDisparidadeBM(imgU1, imgU2);
+    //constroiMapaDisparidadeSGBM(imgU1, imgU2);
+ 
+    constroiMDFiltro(imgU1, imgU2); //with rgb images
+    
+    // k = waitKey(5);
+    // key = (char) waitKey(5);
+    
+    // if(key==27){
+    //     break;
+    // }
 }
+
+
 
 /* Here only the StereoBM, the OpenCV disparity method, is used.
  * The StereoBM calculates the disparities using a matching algorithm between blocks.
@@ -220,11 +222,7 @@ void disparidade::constroiMapaDisparidadeBM(Mat imgRight, Mat imgLeft){
         imshow("windowDisparity", imgDisparity8U);
         //imshow("16S", imgDisparity16S);
         
-        //key = (char) waitKey(5);
-        
-        //if(key==27){
-        //    break;
-        //}
+        auto key = (char) waitKey(0);
     //}
 }
 
@@ -317,7 +315,6 @@ void disparidade::constroiMapaDisparidadeSGBM(Mat imgRight, Mat imgLeft){
  * Example from: http://docs.opencv.org/3.1.0/d3/d14/tutorial_ximgproc_disparity_filtering.html#gsc.tab=0
  */
 void disparidade::constroiMDFiltro(Mat imgRight, Mat imgLeft){
-    
     imgDisparity8U = Mat(imgRight.rows, imgRight.cols, CV_8UC1);
     filter = "wls_conf";
     algo = "sgbm";
@@ -474,8 +471,7 @@ void disparidade::constroiMDFiltro(Mat imgRight, Mat imgLeft){
     if(dst_conf_path!="None"){
         imwrite(dst_conf_path,conf_map);
     }
-    
-    if(!no_display)
+    if(true)
     {
         /*// Displays the original images
         namedWindow("left", WINDOW_AUTOSIZE);
@@ -511,25 +507,28 @@ void disparidade::constroiMDFiltro(Mat imgRight, Mat imgLeft){
          * More Info: http://docs.opencv.org/3.1.0/d3/d50/group__imgproc__colormap.html#gsc.tab=0
          */
         //Applying color maps (different DM visualization)
-        applyColorMap(filtered_disp_vis, imgBONE, COLORMAP_BONE);
-        imshow("Color Map BONE", imgBONE);
-        applyColorMap(filtered_disp_vis, imgHOT, COLORMAP_HOT);
-        imshow("Color Map HOT", imgHOT);
+        // applyColorMap(filtered_disp_vis, imgBONE, COLORMAP_BONE);
+        // imshow("Color Map BONE", imgBONE);
+        // applyColorMap(filtered_disp_vis, imgHOT, COLORMAP_HOT);
+        // imshow("Color Map HOT", imgHOT);
         applyColorMap(filtered_disp_vis, imgCalorHSV, COLORMAP_HSV);
-        imshow("Color Map HSV", imgCalorHSV);
+        // imshow("Color Map HSV", imgCalorHSV);
         
-        cvtColor(m_imageRight, imgOutOne, COLOR_BGR2RGB);
-        cvtColor(m_imageLeft, imgOutTwo, COLOR_BGR2RGB);
-        videoOutOriginalOne.write(imgOutOne);
-        videoOutOriginalTwo.write(imgOutTwo);
-        videoOutDisparityBONE.write(imgBONE);
-        videoOutDisparityHOT.write(imgHOT);
-        videoOutDisparityHSV.write(imgCalorHSV);
+        // cvtColor(m_imageRight, imgOutOne, COLOR_BGR2RGB);
+        // cvtColor(m_imageLeft, imgOutTwo, COLOR_BGR2RGB);
+        // videoOutOriginalOne.write(imgOutOne);
+        // videoOutOriginalTwo.write(imgOutTwo);
+        // videoOutDisparityBONE.write(imgBONE);
+        // videoOutDisparityHOT.write(imgHOT);
+        // videoOutDisparityHSV.write(imgCalorHSV);
         /*//Applying sum with original image and color map (another form of visualization)
         //addWeighted(imgCalorJET, 0.8, imgLeft, 0.2, 1, imgAdd);
         //imshow("Add Weighted", imgAdd);*/
-        
-        //waitKey();
+
+        // Reconstructo3D
+        reprojectImageTo3D(filtered_disp_vis, XYZ3D, Q, true);
+        // cout<<XYZ3D<<endl;
+        // waitKey(0);
         //! [visualization]
     }
 }

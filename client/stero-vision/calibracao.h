@@ -19,11 +19,12 @@ public:
     ~calibracao();
     
     void iniciaCalibracaoCamera();
+    void recitify(Mat &imgL, Mat &imgR, Mat &imgRectify);
     
 private:
 
     //Chessboard Settings
-    int numBoards = 13; //Number of images for the calibration
+    int numBoards = 1; //Number of images for the calibration
     int board_w = 9; //Horizontal corners
     int board_h = 6; //Vertical corners
     float squareSize = 2.5f; //Standard = 1. Small chessboard = 2,5. Large chessboard = 4,4
@@ -54,6 +55,8 @@ private:
     // Q - Disparity matrix by depth 4x4
     Mat R1, R2, P1, P2, Q; 
     
+    //recitified parameter
+    Mat map1x, map1y, map2x, map2y;
 };
 
 #endif /* CALIBRACAOCAMERA_H */
