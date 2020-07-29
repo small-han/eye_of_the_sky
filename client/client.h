@@ -15,8 +15,8 @@
 #include <sys/types.h>
 #include <algorithm>
 #include <unistd.h>
-#include "calibracao.h"
-#include "disparidade.h"
+#include "stero-vision/calibracao.h"
+#include "stero-vision/disparidade.h"
 
 
 class Client()

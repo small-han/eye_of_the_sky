@@ -5,9 +5,6 @@
 #include "opencv2/imgcodecs.hpp"
 #include "opencv2/core/utility.hpp"
 #include "opencv2/ximgproc/disparity_filter.hpp" 
-#include <jetson-utils/loadImage.h>
-#include <jetson-utils/imageIO.h>
-#include <jetson-utils/gstCamera.h>
 
 #include "calibracao.h"
 #include "disparidade.h"
