@@ -10,6 +10,7 @@
 #include "opencv2/ximgproc/disparity_filter.hpp" 
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/xfeatures2d.hpp"
+#include <unistd.h>
 
 #include <stdio.h>
 #include <iostream>

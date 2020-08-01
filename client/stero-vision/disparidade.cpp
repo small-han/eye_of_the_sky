@@ -74,9 +74,16 @@ void disparidade::iniciaDisparidade(){
     Mat D1, D2; //Calibration
     Mat R, T, E, F; //Calibration
     
+    char buf[200]={'0'};
+    getwd(buf);
+    std::string s(buf);
+    std::cout<<s<<std::endl;
+    if(s.back()=='d')
+        s+=("/../");
+    s+="config/mystereocalib.yml";
+    std::cout<<"sv"<<s<<std::endl;
     // Mat R1, R2, P1, P2, Q; //Rectification
-    
-    FileStorage fs("config/mystereocalib.yml", FileStorage::READ);
+    FileStorage fs(s, FileStorage::READ);
     fs["CM1"] >> CM1;
     fs["CM2"] >> CM2;
     fs["D1"] >> D1;
