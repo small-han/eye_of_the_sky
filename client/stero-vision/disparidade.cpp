@@ -79,8 +79,8 @@ void disparidade::iniciaDisparidade(){
     std::string s(buf);
     std::cout<<s<<std::endl;
     if(s.back()=='d')
-        s+=("/../");
-    s+="config/mystereocalib.yml";
+        s+=("/..");
+    s+="/config/mystereocalib.yml";
     std::cout<<"sv"<<s<<std::endl;
     // Mat R1, R2, P1, P2, Q; //Rectification
     FileStorage fs(s, FileStorage::READ);
