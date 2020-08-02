@@ -65,8 +65,8 @@ void disparidade::iniciaDisparidade(){
     img1 = m_imageRight.clone();
     img2 = m_imageLeft.clone();
     
-    cvtColor(img1, img1, CV_BGR2GRAY);
-    cvtColor(img2, img2, CV_BGR2GRAY);
+    cvtColor(img1, img1, COLOR_BGR2GRAY);
+    cvtColor(img2, img2, COLOR_BGR2GRAY);
     
     //+++++Load calibration data from calibrated file +++++//
     Mat CM1 = Mat(3, 3, CV_64FC1); //Calibration
@@ -74,15 +74,12 @@ void disparidade::iniciaDisparidade(){
     Mat D1, D2; //Calibration
     Mat R, T, E, F; //Calibration
     
-    char buf[200]={'0'};
-    getwd(buf);
-    std::string s(buf);
-    std::cout<<s<<std::endl;
-    if(s.back()=='d')
-        s+=("/..");
-    s+="/config/mystereocalib.yml";
-    std::cout<<"sv"<<s<<std::endl;
     // Mat R1, R2, P1, P2, Q; //Rectification
+    
+    char buf[200]={'0'};
+    getcwd(buf,200);
+    std::string s(buf);
+    s+=("/../data/mystereocalib.yml");
     FileStorage fs(s, FileStorage::READ);
     fs["CM1"] >> CM1;
     fs["CM2"] >> CM2;
@@ -161,8 +158,8 @@ void disparidade::retificaParaDisparidade(Mat map1x, Mat map1y, Mat map2x, Mat m
     //These are grayscale images that will be used in the DM.
     Mat grayDisp1, grayDisp2;        
     
-    cvtColor(imgU1, grayDisp1, CV_RGB2GRAY);
-    cvtColor(imgU2, grayDisp2, CV_RGB2GRAY);
+    cvtColor(imgU1, grayDisp1, COLOR_RGB2GRAY);
+    cvtColor(imgU2, grayDisp2, COLOR_RGB2GRAY);
     
     // imwrite("left.ppm", grayDisp1);
     // imwrite("right.ppm", grayDisp2);
@@ -201,8 +198,8 @@ void disparidade::constroiMapaDisparidadeBM(Mat imgRight, Mat imgLeft){
     //while(1){
         Mat grayDisp1, grayDisp2;        
         
-        cvtColor(imgRight, grayDisp1, CV_RGB2GRAY);
-        cvtColor(imgLeft, grayDisp2, CV_RGB2GRAY);
+        cvtColor(imgRight, grayDisp1, COLOR_RGB2GRAY);
+        cvtColor(imgLeft, grayDisp2, COLOR_RGB2GRAY);
         
         //imshow("image1", imgU1);
         //imshow("image2", imgU2);
@@ -279,8 +276,8 @@ void disparidade::constroiMapaDisparidadeSGBM(Mat imgRight, Mat imgLeft){
     //while(1){
         Mat grayDisp1, grayDisp2;        
         
-        cvtColor(imgRight, grayDisp1, CV_RGB2GRAY);
-        cvtColor(imgLeft, grayDisp2, CV_RGB2GRAY);
+        cvtColor(imgRight, grayDisp1, COLOR_RGB2GRAY);
+        cvtColor(imgLeft, grayDisp2, COLOR_RGB2GRAY);
         
         //imshow("image1", imgU1);
         //imshow("image2", imgU2);

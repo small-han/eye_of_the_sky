@@ -17,21 +17,12 @@
 #include <sys/types.h>
 #include <algorithm>
 #include <unistd.h>
-#include <cstring>
 
-int main(){
-    char buf[200]={'0'};
-    getwd(buf);
-    std::string s(buf);
-    std::cout<<s<<std::endl;
 
-    if(s.back()!='d')
-        s+=("/data/");
-    else    
-        s+=("/../data/");
-    
-    cv::Mat imLeft =  cv::imread(s+"outL.jpg");
-    cv::Mat imRight = cv::imread(s+"outR.jpg");
+int main()
+{
+    cv::Mat imLeft =  cv::imread("/home/jetbot/eye_of_the_sky/client/stereo-vision/data/outL.jpg");
+    cv::Mat imRight = cv::imread("/home/jetbot/eye_of_the_sky/client/stereo-vision/data/outR.jpg");
     cv::Mat imOut, lo;
     calibracao c(imLeft, imRight);
     c.iniciaCalibracaoCamera();
@@ -46,3 +37,12 @@ int main(){
     cout<<"corrdinate"<<lo.at<Vec3f>(p)<<endl;
     return 0;
 }
+/*
+#include "stereo.h"
+int main()
+{
+    stereo my_stereo = stereo();
+    my_stereo.run("../data/outL.jpg","../data/outR.jpg");
+
+}
+*/

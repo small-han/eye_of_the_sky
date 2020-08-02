@@ -66,7 +66,7 @@ void detect::OverLay_Left(int index)
     net->Overlay(imgRGBA_left, imgRGBA_left, camera_left->GetWidth(), camera_left->GetHeight(), &detection, 1, overlayFlags);
 }
 
-void detect::Save_RGBA(string left_str,string right_str)
+void detect::Save_RGBA(std::string left_str,std::string right_str)
 {
     char *left_addr=(char*)left_str.data();
     char *right_addr=(char*)right_str.data();
@@ -76,28 +76,4 @@ void detect::Save_RGBA(string left_str,string right_str)
 	//save the right RGBA
 	if( !saveImageRGBA(right_addr, (float4*)imgRGBA_right, camera_right->GetWidth(), camera_right->GetHeight(), 255.0f) )
 		printf("detectnet-console:  failed saving %ix%i image to '%s'\n", camera_left->GetWidth(), camera_left->GetHeight(), "outR.jpg");
-}
-
-int main()
-{
-    detect my_detect=detect();
-    while(1)
-    {
-    my_detect.CaptureRGBA();
-    my_detect.detect_left();
-    for(int i=0;i<my_detect.numDetections;i++)//my_detect.numDetections means the nums of detection
-    {
-        cout<<my_detect.Get_ID(i);
-        
-        float top,bottom,left,right;
-        my_detect.Get_Pos(i,top,bottom,left,bottom);
-        
-        cout<<"top:"<<top<<"bottom:"<<bottom<<"left:"<<left<<"right:"<<right;
-    }
-    //TODO:stereo to know the distance
-    //TODO:we have to know which detection needs to overlay
-    my_detect.OverLay_Left(0);
-    my_detect.Save_RGBA("out1.jpg","out2.jpg");
-    //TODO:we need to trans the picture from jetbot to server
-    }
 }
