@@ -3,7 +3,7 @@
 int main()
 {
     detect my_detect = detect();
-    stereo my_stereo = stereo();
+    stereovis::stereo my_stereo = stereovis::stereo();
     char buf[200]={'0'};
     getcwd(buf,200);
     std::string s(buf);

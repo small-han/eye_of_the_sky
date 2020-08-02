@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
+namespace stereovis{
+
 using namespace cv;
 using namespace std;
 
@@ -61,5 +63,6 @@ private:
     //recitified parameter
     Mat map1x, map1y, map2x, map2y;
 };
+}
 
 #endif /* CALIBRACAOCAMERA_H */

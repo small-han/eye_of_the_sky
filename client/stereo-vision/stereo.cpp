@@ -1,5 +1,5 @@
 #include "stereo.h"
-
+namespace stereovis{
 stereo::stereo()
 {
     safe_distance=100;
@@ -36,4 +36,5 @@ bool stereo::Compute_Distance(int x1, int y1, int x2, int y2)
     {
         return false;
     }
+}
 }

@@ -1,5 +1,7 @@
 #include "calibracao.h"
 
+namespace  stereovis
+{
 calibracao::calibracao(Mat& actualOne, Mat& actualTwo) : m_imageOne(actualOne), m_imageTwo(actualTwo) {
 }
 
@@ -150,3 +152,5 @@ void calibracao::recitify(Mat &imgL, Mat &imgR, Mat& imgRectify){
         resize(imgRectify, imgRectify, Size(imgRectify.cols/2, imgRectify.rows/2));
     }
 }
+    
+} 

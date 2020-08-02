@@ -1,7 +1,8 @@
 #include <opencv2/video/tracking.hpp>
 
 #include "disparidade.h"
-
+namespace  stereovis
+{
 disparidade::disparidade(Mat& actualOne, Mat& actualTwo) : m_imageRight(actualOne), m_imageLeft(actualTwo) {
     /*To save the Disparity Map in different views.*/
     //videoOutDispatiryJET = cv::VideoWriter("/media/thiago/Lobinho/outDispatiryJET.avi",CV_FOURCC('M','J','P','G'), 10, Size(352,288),true);
@@ -552,5 +553,6 @@ Rect disparidade::computeROI(Size2i src_sz, Ptr<StereoMatcher> matcher_instance)
 
     Rect r(xmin, ymin, xmax - xmin, ymax - ymin);
     return r;
+}
 }
 

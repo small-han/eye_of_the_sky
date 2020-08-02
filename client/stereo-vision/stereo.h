@@ -19,6 +19,7 @@
 #include "calibracao.h"
 #include "disparidade.h"
 
+namespace stereovis{
 class stereo
 {
 private:
@@ -32,3 +33,4 @@ public:
     void run(string left_addr,string right_addr);
     bool Compute_Distance(int x1,int y1,int x2,int y2);
 };
+}

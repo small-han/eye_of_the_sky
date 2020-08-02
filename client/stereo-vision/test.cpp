@@ -24,17 +24,17 @@ int main()
     cv::Mat imLeft =  cv::imread("/home/jetbot/eye_of_the_sky/client/stereo-vision/data/outL.jpg");
     cv::Mat imRight = cv::imread("/home/jetbot/eye_of_the_sky/client/stereo-vision/data/outR.jpg");
     cv::Mat imOut, lo;
-    calibracao c(imLeft, imRight);
+    stereovis::calibracao c(imLeft, imRight);
     c.iniciaCalibracaoCamera();
     // c.recitify(imLeft, imRight, imOut);
     // imshow("Recitied",imOut);
     // auto key=waitKey(0);
-    disparidade d(imLeft, imRight);
+    stereovis::disparidade d(imLeft, imRight);
     d.iniciaDisparidade();
     d.getDisparity();
     d.get3DLocation(lo);
-    auto p = Point(500, 500);
-    cout<<"corrdinate"<<lo.at<Vec3f>(p)<<endl;
+    auto p = cv::Point(500, 500);
+    std::cout<<"corrdinate"<<lo.at<cv::Vec3f>(p)<<std::endl;
     return 0;
 }
 /*
