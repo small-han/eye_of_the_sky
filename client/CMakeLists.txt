@@ -16,4 +16,4 @@ find_package(OpenCV REQUIRED)
 cuda_add_executable(out ./stereo-vision/calibracao.cpp ./stereo-vision/disparidade.cpp ./stereo-vision/stereo.cpp main.cpp ./detect/detect.cpp)
 
 # link my-recognition to jetson-inference library
-target_link_libraries(out jetson-inference ${OpenCV_LIBS})
+target_link_libraries(out jetson-inference ${OpenCV_LIBS} PRIVATE)
