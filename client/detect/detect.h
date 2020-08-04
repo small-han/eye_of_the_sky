@@ -5,7 +5,6 @@
 #include <opencv2/opencv.hpp>
 #include <string>
 
-using namespace std;
 class detect
 {
 private:
@@ -28,6 +27,6 @@ public:
     const char *Get_ID(int index);
     void Get_Pos(int index, float &top, float &down, float &left, float &right);
     void OverLay_Left(int index);
-    void Save_RGBA(string left_str,string right_str);
+    void Save_RGBA(std::string left_str,std::string right_str);
 };
 

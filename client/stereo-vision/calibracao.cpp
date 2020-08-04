@@ -1,5 +1,7 @@
 #include "calibracao.h"
 
+namespace  stereovis
+{
 calibracao::calibracao(Mat& actualOne, Mat& actualTwo) : m_imageOne(actualOne), m_imageTwo(actualTwo) {
 }
 
@@ -38,8 +40,8 @@ void calibracao::iniciaCalibracaoCamera(){
         img1 = m_imageOne.clone();
         img2 = m_imageTwo.clone();
         
-        cvtColor(img1, gray1, CV_BGR2GRAY);
-        cvtColor(img2, gray2, CV_BGR2GRAY);
+        cvtColor(img1, gray1, COLOR_BGR2GRAY);
+        cvtColor(img2, gray2, COLOR_BGR2GRAY);
         
         found1 = findChessboardCorners(img1, board_sz, corners1, CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS);
         found2 = findChessboardCorners(img2, board_sz, corners2, CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS);
@@ -84,7 +86,11 @@ void calibracao::iniciaCalibracaoCamera(){
             CV_CALIB_SAME_FOCAL_LENGTH | CV_CALIB_ZERO_TANGENT_DIST,
             cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, 1e-5));
     
-    FileStorage fs1("config/mystereocalib.yml", FileStorage::WRITE);
+    char buf[200]={'0'};
+    getcwd(buf,200);
+    std::string s(buf);
+    s+=("/../data/mystereocalib.yml");
+    FileStorage fs1(s, FileStorage::WRITE);
     fs1 << "CM1" << CM1;
     fs1 << "CM2" << CM2;
     fs1 << "D1" << D1;
@@ -146,3 +152,5 @@ void calibracao::recitify(Mat &imgL, Mat &imgR, Mat& imgRectify){
         resize(imgRectify, imgRectify, Size(imgRectify.cols/2, imgRectify.rows/2));
     }
 }
+    
+} 

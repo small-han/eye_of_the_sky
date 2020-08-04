@@ -3,11 +3,16 @@
 
 #include "opencv2/core/core.hpp"
 #include "opencv2/calib3d/calib3d.hpp"
+#include "opencv2/calib3d/calib3d_c.h"
 #include "opencv2/highgui/highgui.hpp"
+#include "opencv2/highgui/highgui_c.h"
 #include "opencv2/imgproc/imgproc.hpp"
 
 #include <iostream>
 #include <stdio.h>
+#include <unistd.h>
+
+namespace stereovis{
 
 using namespace cv;
 using namespace std;
@@ -58,5 +63,6 @@ private:
     //recitified parameter
     Mat map1x, map1y, map2x, map2y;
 };
+}
 
 #endif /* CALIBRACAOCAMERA_H */

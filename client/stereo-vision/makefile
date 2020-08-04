@@ -1,5 +1,7 @@
-LIB=-L/usr/local/opt/opencv@3/lib
-INC=-I/usr/local/opt/opencv@3/include
+LIB=-L/usr/local/lib/
+INC=-I/usr/local/include/opencv4
+# LIB=-L/usr/local/Cellar/opencv@3/3.4.10_4/lib
+# INC=-I/usr/local/Cellar/opencv@3/3.4.10_4/include
 CFLAGS=-std=c++11
 
 default: clean test
