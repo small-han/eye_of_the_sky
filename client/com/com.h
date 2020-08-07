@@ -6,6 +6,7 @@
 #include <memory>
 #include <vector>
 #include <iostream>
+#include <fstream>
 
 #include <assert.h>
 #include <stdio.h>
@@ -14,10 +15,9 @@
 using easywsclient::WebSocket;
 
 
-
 class Transmitter{
     public:
-        enum class FileType{String, IMG, CSV};
+        enum class FileType{String, Binary};
         Transmitter();
         Transmitter(std::string address):serverAddress(address) {};
         ~Transmitter(){
@@ -28,10 +28,10 @@ class Transmitter{
             }
         };
         void init();
-        void send(FileType type, uint8_t* buf, uint32_t size);
+        void send(FileType type, std::string data, uint32_t size);
         void recv();
     private:
         std::string serverAddress;
         WebSocket::pointer ws;
-        void handler(const std::string& message);
+        static void handler(const std::string& message);
 };
