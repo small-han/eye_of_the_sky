@@ -7,8 +7,8 @@ Created on Thu Aug  6 23:32:48 2020
 import asyncio
 import websockets
 import os
-import nest_asyncio
-nest_asyncio.apply()
+# import nest_asyncio
+# nest_asyncio.apply()
 async def hello(websocket, path):
 
     while True:
