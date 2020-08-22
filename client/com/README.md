@@ -12,3 +12,4 @@
 
 第一次发送了“hello”，第二次发送图片名字，第三次发送大小，第四次发送二进制文件
 + 如果要改变服务器ip，在test.cpp第4行改变ip
+if want to run test.cpp,have to modify the address of easywsclient.hpp in com.h

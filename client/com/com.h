@@ -1,4 +1,4 @@
-#include "easywsclient/easywsclient.hpp"
+#include "easywsclient.hpp"
 //#include "easywsclient.cpp" // <-- include only if you don't want compile separately
 #include <assert.h>
 #include <stdio.h>
