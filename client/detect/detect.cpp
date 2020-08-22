@@ -34,13 +34,14 @@ void detect::detect_left()
     numDetections = net->Detect(imgRGBA_left, camera_left->GetWidth(), camera_left->GetHeight(), &detections, detectNet::OVERLAY_NONE);
 }
 
-const char *detect::Get_ID(int index)
+std::string detect::Get_ID(int index)
 {
     if(index>=numDetections)
     {
         return "none";
     }
-    return net->GetClassDesc(detections[index].ClassID);
+    std::string str=net->GetClassDesc(detections[index].ClassID);
+    return str;
 }
 
 void detect::Get_Pos(int index, float &top, float &bottom, float &left, float &right)
@@ -62,8 +63,23 @@ void detect::OverLay_Left(int index)
         return ;
     }
     const uint32_t overlayFlags = detectNet::OverlayFlagsFromStr("box");/*label,conf*/
-    detectNet::Detection detection = detections[index];
-    net->Overlay(imgRGBA_left, imgRGBA_left, camera_left->GetWidth(), camera_left->GetHeight(), &detection, 1, overlayFlags);
+    int j=-1;
+    for(int i=0;i<numDetections;i++)
+    {
+        std::cout<<Get_ID(i)<<std::endl;
+        if(Get_ID(i)=="person")
+        {
+            std::cout<<j<<"   "<<index<<std::endl;
+            j++;
+            if(index==j)
+            {
+                std::cout<<"hello";
+                detectNet::Detection detection = detections[i];
+                net->Overlay(imgRGBA_left, imgRGBA_left, camera_left->GetWidth(), camera_left->GetHeight(), &detection, 1, overlayFlags);
+                return;
+            }
+        }
+    }
 }
 
 void detect::Save_RGBA(std::string left_str,std::string right_str)

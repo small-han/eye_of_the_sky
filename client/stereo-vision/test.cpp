@@ -21,8 +21,8 @@
 
 int main()
 {
-    cv::Mat imLeft =  cv::imread("/home/jetbot/eye_of_the_sky/client/stereo-vision/data/outL.jpg");
-    cv::Mat imRight = cv::imread("/home/jetbot/eye_of_the_sky/client/stereo-vision/data/outR.jpg");
+    cv::Mat imLeft =  cv::imread("/home/jetbot/eye_of_the_sky/client/data/outL.jpg");
+    cv::Mat imRight = cv::imread("/home/jetbot/eye_of_the_sky/client/data/outR.jpg");
     cv::Mat imOut, lo;
     stereovis::calibracao c(imLeft, imRight);
     c.iniciaCalibracaoCamera();

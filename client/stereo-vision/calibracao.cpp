@@ -90,6 +90,7 @@ void calibracao::iniciaCalibracaoCamera(){
     getcwd(buf,200);
     std::string s(buf);
     s+=("/../data/mystereocalib.yml");
+    std::cout<<s<<std::endl;
     FileStorage fs1(s, FileStorage::WRITE);
     fs1 << "CM1" << CM1;
     fs1 << "CM2" << CM2;

@@ -28,13 +28,15 @@ void Transmitter::send(FileType type, std::string data, uint32_t size){
             int length = is.tellg();
             is.seekg(0, is.beg);
             std::string str_length=std::to_string(length);
+            // std::cout<<str_length;
             ws->send(str_length);
             // 3. 创建内存缓存区
             char * buffer = new char[length];
             // 4. 读取图片
             is.read(buffer, length);
             // 到此，图片已经成功的被读取到内存（buffer）中
-            std::string str_data=buffer;
+            std::string str_data(buffer,buffer+length);
+            // std::cout<<"size:"<<str_data.length()<<std::endl;
             delete [] buffer;
             ws->sendBinary(str_data);
             is.close();

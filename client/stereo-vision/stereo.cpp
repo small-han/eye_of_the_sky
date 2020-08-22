@@ -13,8 +13,8 @@ void stereo::run(string left_addr, string right_addr)
 {
     cv::Mat imLeft = cv::imread(left_addr);
     cv::Mat imRight = cv::imread(right_addr);
-    calibracao c(imLeft, imRight);
-    c.iniciaCalibracaoCamera();
+    // calibracao c(imLeft, imRight);
+    // c.iniciaCalibracaoCamera();
     disparidade d(imLeft, imRight);
     d.iniciaDisparidade();
     d.getDisparity();

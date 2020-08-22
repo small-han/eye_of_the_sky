@@ -24,7 +24,7 @@ public:
     ~detect();
     void CaptureRGBA();
     void detect_left();
-    const char *Get_ID(int index);
+    std::string Get_ID(int index);
     void Get_Pos(int index, float &top, float &down, float &left, float &right);
     void OverLay_Left(int index);
     void Save_RGBA(std::string left_str,std::string right_str);

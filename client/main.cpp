@@ -1,9 +1,11 @@
 #include "stereo.h"
 #include "detect.h"
+#include "com.h"
 int main()
 {
     detect my_detect = detect();
     stereovis::stereo my_stereo = stereovis::stereo();
+    Transmitter my_trans=Transmitter("ws://192.168.43.8:8765");
     char buf[200]={'0'};
     getcwd(buf,200);
     std::string s(buf);
@@ -15,6 +17,7 @@ int main()
         my_detect.Save_RGBA(s+"out1.jpg", s+"out2.jpg");//save frame
         my_stereo.run(s+"out1.jpg", s+"out2.jpg");//stereo 
 
+/*
         for (int i = 0; i < my_detect.numDetections; i++) // compute the distance between every two person
         {
             for (int j = i; j < my_detect.numDetections; j++) 
@@ -37,7 +40,9 @@ int main()
                 }
             }
         }
-        my_detect.Save_RGBA(s+"out1.jpg",s+"out2.jpg");
+        */
+        my_detect.OverLay_Left(0);
+        my_detect.Save_RGBA(s+"out1-1.jpg",s+"out1-2.jpg");
         //TODO:we need to trans the "out1.jpg" from jetbot to server
     }
 }
