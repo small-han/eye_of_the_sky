@@ -25,6 +25,8 @@ class stereo
 private:
     cv::Mat lo;
     float safe_distance;
+    cv::Mat imLeft ;
+    cv::Mat imRight ;
 
 public:
     stereo();
@@ -32,5 +34,8 @@ public:
 
     void run(string left_addr,string right_addr);
     bool Compute_Distance(int x1,int y1,int x2,int y2);
+    void Overlay_Red(int top,int bottom,int left,int right);
+    void Overlay_Green(int top,int bottom,int left,int right);
+    void Save(std::string addr);
 };
 }

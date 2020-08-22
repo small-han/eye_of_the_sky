@@ -11,8 +11,8 @@ stereo::~stereo()
 
 void stereo::run(string left_addr, string right_addr)
 {
-    cv::Mat imLeft = cv::imread(left_addr);
-    cv::Mat imRight = cv::imread(right_addr);
+    imLeft = cv::imread(left_addr);
+    imRight = cv::imread(right_addr);
     // calibracao c(imLeft, imRight);
     // c.iniciaCalibracaoCamera();
     disparidade d(imLeft, imRight);
@@ -36,5 +36,20 @@ bool stereo::Compute_Distance(int x1, int y1, int x2, int y2)
     {
         return false;
     }
+}
+
+void stereo::Overlay_Red(int top,int bottom,int left,int right)
+{
+    cv::rectangle(imLeft,cvPoint(left,top),cvPoint(right,bottom),cvScalar(0,0,255),2);
+}
+
+void stereo::Overlay_Green(int top,int bottom,int left,int right)
+{
+    cv::rectangle(imLeft,cvPoint(left,top),cvPoint(right,bottom),cvScalar(0,255,0),2);
+}
+
+void stereo::Save(std::string addr)
+{
+    cv::imwrite(addr,imLeft);
 }
 }

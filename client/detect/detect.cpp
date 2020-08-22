@@ -90,6 +90,7 @@ void detect::Save_RGBA(std::string left_str,std::string right_str)
 		printf("detectnet-console:  failed saving %ix%i image to '%s'\n", camera_left->GetWidth(), camera_left->GetHeight(), "outL.jpg");
 
 	//save the right RGBA
-	if( !saveImageRGBA(right_addr, (float4*)imgRGBA_right, camera_right->GetWidth(), camera_right->GetHeight(), 255.0f) )
-		printf("detectnet-console:  failed saving %ix%i image to '%s'\n", camera_left->GetWidth(), camera_left->GetHeight(), "outR.jpg");
+    if(right_str=="none")
+        if( !saveImageRGBA(right_addr, (float4*)imgRGBA_right, camera_right->GetWidth(), camera_right->GetHeight(), 255.0f) )
+            printf("detectnet-console:  failed saving %ix%i image to '%s'\n", camera_left->GetWidth(), camera_left->GetHeight(), "outR.jpg");
 }

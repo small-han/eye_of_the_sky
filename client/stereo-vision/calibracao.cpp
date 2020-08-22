@@ -113,7 +113,7 @@ void calibracao::iniciaCalibracaoCamera(){
     fs1 << "Q" << Q;
     fs1 << "R1" << R1;
 
-    cout << Q << endl;
+    // cout << Q << endl;
 
     fs1.release();
     cout << "Rectification completed" << endl;
