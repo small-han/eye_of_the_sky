@@ -16,6 +16,7 @@ int main()
     {
         my_detect.CaptureRGBA();//capture frame from two cameras
         my_detect.detect_left();//detect the frame from left camera
+        std::cout<<"num of detections is"<<my_detect.numDetections<<std::endl;
         my_detect.Save_RGBA(s+"out1.jpg", s+"out2.jpg");//save frame
         my_stereo.run(s+"out1.jpg", s+"out2.jpg");//stereo 
         std::cout<<"finish stereo"<<std::endl;
