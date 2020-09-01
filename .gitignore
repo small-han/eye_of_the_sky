@@ -1,0 +1,14 @@
+#*
+#*#
+*#
+*.*#
+*.class
+*.dSYM
+*.la
+*.lo
+*.o
+*.so
+*.DS_Store
+.vscode/
+.DS_Store
+build/
