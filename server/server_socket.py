@@ -10,22 +10,22 @@ import socket
 import os
 import sys
 from PyQt5 import QtWidgets,QtGui
-import pandas as pd
-
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-
 import numpy as np
 import pandas as pd
-
 import time
-
 import random
 import string
 import asyncio
 import websockets
 from PyQt5.QtCore import pyqtSignal
+
+client_ip="localhost"
+client_port=6668
+server_ip="localhost"
+server_port=6668
 # async def trans(websocket, path):
 #     print("web start")
 #     while True:
@@ -171,20 +171,35 @@ class Server():
     def setButtonLayout(self):
         clientIPBtn = QPushButton("Client IP");
         clientIPEdit = QLineEdit()
+        clientIPEdit.textChanged.connect(self.ClientIP)
+        clientIPEdit.setPlaceholderText(str(client_ip))
+        
         clientPortBtn = QPushButton("Client Port");
         clientPortEdit = QLineEdit()
+        clientPortEdit.textChanged.connect(self.ClientPort)
+        clientPortEdit.setPlaceholderText(str(client_port))
+        
         serverIPBtn = QPushButton("Server IP");
         serverIPEdit = QLineEdit()
+        serverIPEdit.textChanged.connect(self.ServerIP)
+        serverIPEdit.setPlaceholderText(str(server_ip))
+        
         serverPortBtn = QPushButton("Server Port");
         serverPortEdit = QLineEdit()
+        serverPortEdit.textChanged.connect(self.ServerPort)
+        serverPortEdit.setPlaceholderText(str(server_port))
          # add start button
         button1 = QPushButton('Start')
         button1.setMinimumHeight(100)
         button1.setMinimumWidth(100)
+        button1.clicked.connect(self.start)
         button2 = QPushButton('Close')
         button2.setMinimumHeight(100)
         button2.setMinimumWidth(100)
-
+        button2.clicked.connect(QCoreApplication.instance().quit)
+        # button2.clicked.connect(sys.exit(0))
+        # button2.clicked.connect(self.close())
+        
         # auto vectical scale
         buttons = [button1,button2,clientIPBtn,clientIPEdit,clientPortBtn,clientPortEdit,serverIPBtn,serverIPEdit,serverPortBtn,serverPortEdit]
         for btn in buttons:
@@ -201,7 +216,16 @@ class Server():
                 
         self.buttonLayout.setAlignment(Qt.AlignLeft)
         self.buttonsWidget.setLayout(self.buttonLayout)
-        
+    
+    def ClientIP(self,text):
+        client_ip=str(text)
+    def ClientPort(self,text):
+        client_port=int(text)
+    def ServerIP(self,text):
+        server_ip=str(text)
+    def ServerPort(self,text):
+        server_port=int(text)
+    
     def initCenturalWidget(self):
         self.centuralLayout.setSpacing(20)
         self.centuralLayout.addWidget(self.dataWidget,95)
