@@ -34,8 +34,6 @@ server_port=6668
 
 
 
-# trigger = pyqtSignal(str)
-
 class SocketServer(QThread):
     trigger = pyqtSignal(str)
     def __int__(self):
@@ -46,7 +44,7 @@ class SocketServer(QThread):
         print('run')
         while(1):
             IP="localhost"
-            port=6663
+            port=6664
             DIR=os.path.dirname(os.path.abspath(__file__))
             client = socket.socket()  # 1.声明协议类型，同时生成socket链接对象
             client.bind((IP, port))  # 绑定要监听端口=(服务器的ip地址+任意一个端口)
@@ -84,7 +82,7 @@ class SocketServer(QThread):
                 print("recv:", data.decode())
             self.trigger.emit(str(time.time()))
         
-        client.close()
+        # client.close()
         
 
 class Server():
