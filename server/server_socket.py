@@ -51,7 +51,6 @@ class SocketServer(QThread):
             client.listen(5)  # 监听
             print("waiting for connection...")
             conn, addr = client.accept()  # 等电话打进来
-                # conn就是客户端连过来而在服务器端为其生成的一个连接实例
             print("收到来自{}请求".format(addr))
 
             BASE_DIR = DIR  # 获得当前目录
