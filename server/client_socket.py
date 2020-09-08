@@ -60,6 +60,6 @@ class Send:
         
         
 IP="localhost"
-port=6663
+port=6664
 sen=Send(IP,port)
 sen.send_data()
