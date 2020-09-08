@@ -10,12 +10,17 @@ import socket
 import os
 import sys
 from PyQt5 import QtWidgets,QtGui
+import pandas as pd
+
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+
 import numpy as np
 import pandas as pd
+
 import time
+
 import random
 import string
 import asyncio
@@ -26,27 +31,7 @@ client_ip="localhost"
 client_port=6668
 server_ip="localhost"
 server_port=6668
-# async def trans(websocket, path):
-#     print("web start")
-#     while True:
-#         # BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'pics')
-#         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-#         #文件名
-#         filename = await websocket.recv()
-#         print(filename)
-#         #文件大小
-#         filesize = await websocket.recv()
-#         filesize = int(filesize)
-#         print(filesize)
-        
-#         path = os.path.join(BASE_DIR, filename)
-#         f = open(path, 'wb') 
-#         #接收文件
-#         data =await websocket.recv() 
-#         f.write(data)
-#         f.close()  
-#         trigger.emit(str(time.time()))
-#         print("receive successfully!")
+
 
 
 # trigger = pyqtSignal(str)
@@ -55,9 +40,6 @@ class SocketServer(QThread):
     trigger = pyqtSignal(str)
     def __int__(self):
         super(QThread, self).__init__()
-        # start_server = websockets.serve(trans, "localhost", 8765)
-        # asyncio.get_event_loop().run_until_complete(start_server)
-        # asyncio.get_event_loop().run_forever()
 
     def run(self):
         # trigger = pyqtSignal(str)
