@@ -23,11 +23,15 @@ void stereo::run(string left_addr, string right_addr)
 
 bool stereo::Compute_Distance(int x1, int y1, int x2, int y2)
 {
-    auto p1 = Point(y1, x1);
-    auto p2 = Point(y2, x2);
+	std::cout<<"begin compute disctance"<<std::endl;
+    auto p1 = Point(x1, y1);
+    auto p2 = Point(x2, y2);
+    std::cout<<y1<<" "<<x1<<" "<<y2<<" "<<x2<<" "<<std::endl;
     auto xyz1 = lo.at<Vec3f>(p1);
     auto xyz2 = lo.at<Vec3f>(p2);
+    std::cout<<"hello!!!"<<std::endl;
     float distance = std::sqrt(std::pow(xyz1[0] - xyz2[0], 2)+ std::pow(xyz1[1] - xyz2[1], 2)+ std::pow(xyz1[2] - xyz2[2],2));
+	std::cout<<"finish cmopute disctance"<<std::endl;
     if (distance < safe_distance)
     {
         return true;

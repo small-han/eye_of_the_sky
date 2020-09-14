@@ -15,7 +15,7 @@ find_package(jetson-inference)
 find_package(CUDA)
 
 # compile the my-recognition program
-cuda_add_executable(detect detect.cpp detect.h)
+cuda_add_executable(detect detect.cpp detect.h test1.cpp)
 
 # link my-recognition to jetson-inference library
 target_link_libraries(detect jetson-inference)

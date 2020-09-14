@@ -1,16 +1,17 @@
 #include "stereo.h"
 #include "detect.h"
-#include "com.h"
+#include "soc.h"
 int main()
 {
     detect my_detect = detect();
     stereovis::stereo my_stereo = stereovis::stereo();
-    Transmitter my_trans=Transmitter("ws://192.168.43.8:8765");
+    Comm my_com=Comm();
 
     char buf[200]={'0'};
     getcwd(buf,200);
     std::string s(buf);
     s+=("/../data/");
+    std::cout<<"hello"<<std::endl;
 
     while (1)
     {
@@ -21,7 +22,7 @@ int main()
         my_stereo.run(s+"out1.jpg", s+"out2.jpg");//stereo 
         std::cout<<"finish stereo"<<std::endl;
 
-        int flags[20];
+        int flags[30];
         for (int i = 0; i < my_detect.numDetections; i++) // compute the distance between every two person
         {
             for (int j = i+1; j < my_detect.numDetections; j++) 
@@ -61,5 +62,6 @@ int main()
         my_stereo.Save(s+"out.jpg");
         std::cout<<"finish save"<<std::endl;
         //TODO:we need to trans the "out1.jpg" from jetbot to server
+	my_com.run();
     }
 }
