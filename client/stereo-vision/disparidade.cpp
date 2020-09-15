@@ -162,8 +162,8 @@ void disparidade::retificaParaDisparidade(Mat map1x, Mat map1y, Mat map2x, Mat m
     cvtColor(imgU1, grayDisp1, COLOR_RGB2GRAY);
     cvtColor(imgU2, grayDisp2, COLOR_RGB2GRAY);
     
-    // imwrite("left.ppm", grayDisp1);
-    // imwrite("right.ppm", grayDisp2);
+   // imwrite("left.ppm", grayDisp1);
+   // imwrite("right.ppm", grayDisp2);
     
     //constroiMapaDisparidadeBM(imgU1, imgU2);
     //constroiMapaDisparidadeSGBM(imgU1, imgU2);
@@ -223,7 +223,7 @@ void disparidade::constroiMapaDisparidadeBM(Mat imgRight, Mat imgLeft){
         imgDisparity16S.convertTo(imgDisparity8U, CV_8UC1, 255/(maxVal - minVal));
         //imgDisparity16S.convertTo(imgDisparity8U, CV_8U);
         
-        //namedWindow("windowDisparity", WINDOW_NORMAL);
+        namedWindow("windowDisparity", WINDOW_NORMAL);
         imshow("windowDisparity", imgDisparity8U);
         //imshow("16S", imgDisparity16S);
         
@@ -280,8 +280,9 @@ void disparidade::constroiMapaDisparidadeSGBM(Mat imgRight, Mat imgLeft){
         cvtColor(imgRight, grayDisp1, COLOR_RGB2GRAY);
         cvtColor(imgLeft, grayDisp2, COLOR_RGB2GRAY);
         
-        //imshow("image1", imgU1);
-        //imshow("image2", imgU2);
+        namedWindow("windowDisparity", WINDOW_NORMAL);
+        imshow("image1", imgU1);
+        imshow("image2", imgU2);
         
         Mat imgDisparity16S = Mat(imgRight.rows, imgRight.cols, CV_16S);
         Mat imgDisparity8U = Mat(imgRight.rows, imgRight.cols, CV_8UC1);
@@ -297,7 +298,9 @@ void disparidade::constroiMapaDisparidadeSGBM(Mat imgRight, Mat imgLeft){
         sgbm->setMode(StereoSGBM::MODE_SGBM);
         
         sgbm->compute(grayDisp1, grayDisp2, imgDisparity16S);
-        //imwrite( "test.jpg", imgDisparity16S );
+        
+	imwrite( "../data/test.jpg", imgDisparity16S );
+
         
         double minVal, maxVal;
         
@@ -321,18 +324,18 @@ void disparidade::constroiMapaDisparidadeSGBM(Mat imgRight, Mat imgLeft){
  */
 void disparidade::constroiMDFiltro(Mat imgRight, Mat imgLeft){
     imgDisparity8U = Mat(imgRight.rows, imgRight.cols, CV_8UC1);
-    filter = "wls_conf";
+    filter = "wls_no_conf";
     algo = "sgbm";
     dst_path = "None";
     dst_raw_path = "None";
     dst_conf_path = "None";
     
     max_disp = 5*16;
-    lambda = 8000.0;
+    lambda = 16000;
     sigma = 1.5;
     vis_mult = 1.3;
     
-    wsize = 1; // 3 if SGBM
+    wsize = 3; // 3 if SGBM
     //wsize = 15; // if BM, 7 or 15
     
     conf_map = Mat(imgLeft.rows,imgLeft.cols,CV_8U);
@@ -373,10 +376,10 @@ void disparidade::constroiMDFiltro(Mat imgRight, Mat imgLeft){
         }else if(algo=="sgbm"){
             Ptr<StereoSGBM> left_matcher  = StereoSGBM::create(0,max_disp,wsize);
             left_matcher->setP1(8*wsize*wsize);
-            left_matcher->setP2(96*wsize*wsize);
+            left_matcher->setP2(32*wsize*wsize);
             left_matcher->setPreFilterCap(63);
             left_matcher->setMode(StereoSGBM::MODE_HH); //MODE_SGBM_3WAY
-            //left_matcher->setBlockSize(1);
+            left_matcher->setBlockSize(5);
             wls_filter = createDisparityWLSFilter(left_matcher);
             Ptr<StereoMatcher> right_matcher = createRightMatcher(left_matcher);
             
@@ -395,6 +398,7 @@ void disparidade::constroiMDFiltro(Mat imgRight, Mat imgLeft){
         wls_filter->setLambda(lambda);
         wls_filter->setSigmaColor(sigma);
         //filtering_time = (double)getTickCount();
+	//cv::imwrite("../data/test4",left_disp);
         wls_filter->filter(left_disp, imgLeft, filtered_disp, right_disp);
         //filtering_time = ((double)getTickCount() - filtering_time)/getTickFrequency();
         
@@ -512,12 +516,12 @@ void disparidade::constroiMDFiltro(Mat imgRight, Mat imgLeft){
          * More Info: http://docs.opencv.org/3.1.0/d3/d50/group__imgproc__colormap.html#gsc.tab=0
          */
         //Applying color maps (different DM visualization)
-        // applyColorMap(filtered_disp_vis, imgBONE, COLORMAP_BONE);
-        // imshow("Color Map BONE", imgBONE);
-        // applyColorMap(filtered_disp_vis, imgHOT, COLORMAP_HOT);
-        // imshow("Color Map HOT", imgHOT);
+        applyColorMap(filtered_disp_vis, imgBONE, COLORMAP_BONE);
+        imwrite("../data/test1.jpg", imgBONE);
+        applyColorMap(filtered_disp_vis, imgHOT, COLORMAP_HOT);
+        imwrite("../data/test2.jpg", imgHOT);
         applyColorMap(filtered_disp_vis, imgCalorHSV, COLORMAP_HSV);
-        // imshow("Color Map HSV", imgCalorHSV);
+        imwrite("../data/test3.jpg", imgCalorHSV);
         
         // cvtColor(m_imageRight, imgOutOne, COLOR_BGR2RGB);
         // cvtColor(m_imageLeft, imgOutTwo, COLOR_BGR2RGB);

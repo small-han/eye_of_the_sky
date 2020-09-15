@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 # declare my-recognition project
 project(Jetson)
-
+set(CMAKE_BUILD_TYPE "Debug")
 include_directories(/usr/include/gstreamer-1.0 /usr/lib/aarch64-linux-gnu/gstreamer-1.0/include /usr/include/glib-2.0 /usr/include/libxml2 /usr/lib/aarch64-linux-gnu/glib-2.0/include/ /usr/include/opencv4 ./detect /usr/local/include/opencv4 ./stereo-vision ./com ./com/easywsclient ./com/socket)
 
 # CUDA is required
