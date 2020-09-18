@@ -32,8 +32,6 @@ client_port=6668
 server_ip="localhost"
 server_port=6668
 
-
-
 class SocketServer(QThread):
     trigger = pyqtSignal(str)
     def __int__(self):
@@ -41,19 +39,18 @@ class SocketServer(QThread):
 
     def run(self):
         print('run')
-        
         while(1):
-            IP="localhost"
-            port=6664
-            DIR=os.path.dirname(os.path.abspath(__file__))
-            client = socket.socket()  # 1.声明协议类型，同时生成socket链接对象
-            client.bind((IP, port))  # 绑定要监听端口=(服务器的ip地址+任意一个端口)
-            client.listen(5)  # 监听
+            IP=server_ip
+            port=server_port
+            print(IP,port,server_ip,server_port)
+            BASE_DIR=os.path.dirname(os.path.abspath(__file__))
+            server = socket.socket()  # 1.声明协议类型，同时生成socket链接对象
+            server.bind((IP, port))  # 绑定要监听端口=(服务器的ip地址+任意一个端口)
+            server.listen(5)  # 监听
             print("waiting for connection...")
-            conn, addr = client.accept()  # 等电话打进来
+            conn, addr = server.accept()  # 等电话打进来
             print("收到来自{}请求".format(addr))
 
-            BASE_DIR = DIR  # 获得当前目录
 
             command=['pic.png','info.csv','break']
             for i in range(3):
@@ -72,24 +69,21 @@ class SocketServer(QThread):
                     filesize = int(filesize)  # 图像大小转换成整形
 
                     f = open(path, 'ab')  # 以二进制格式打开一个文件用于追加。如果该文件不存在，创建新文件进行写入。
-                    # has_receive = 0  # 统计接收到的字节数
-                    # while has_receive != filesize:
-                    data1 = conn.recv(filesize)  # 一次从服务端接收1024字节的数据
-                    f.write(data1)  # 写入
-                        # has_receive += len(data1)  # 更新接收到的字节数
+                    has_receive = 0  # 统计接收到的字节数
+                    while has_receive != filesize:
+                        data1 = conn.recv(1024)  # 一次从服务端接收1024字节的数据
+                        f.write(data1)  # 写入
+                        has_receive += len(data1)  # 更新接收到的字节数
                     f.close()  # 关闭文件
                 print("recv:", data.decode())
             self.trigger.emit(str(time.time()))
-
+            server.close()
         
 
 class Server():
     def __init__(self):#,IP,port,DIR):
         self.app = QApplication(sys.argv)
-        # print('1')
-        # self.IP=IP
-        # self.port=port
-        # self.DIR=DIR
+
         # UI类
         self.mainwindow = QtWidgets.QMainWindow()
         self.centuralLayout = QHBoxLayout()
@@ -170,14 +164,10 @@ class Server():
         button1 = QPushButton('Start')
         button1.setMinimumHeight(100)
         button1.setMinimumWidth(100)
-        button1.clicked.connect(self.start)
         button2 = QPushButton('Close')
         button2.setMinimumHeight(100)
         button2.setMinimumWidth(100)
-        button2.clicked.connect(QCoreApplication.instance().quit)
-        # button2.clicked.connect(sys.exit(0))
-        # button2.clicked.connect(self.close())
-        
+
         # auto vectical scale
         buttons = [button1,button2,clientIPBtn,clientIPEdit,clientPortBtn,clientPortEdit,serverIPBtn,serverIPEdit,serverPortBtn,serverPortEdit]
         for btn in buttons:
@@ -203,6 +193,7 @@ class Server():
         server_ip=str(text)
     def ServerPort(self,text):
         server_port=int(text)
+        # print(server_port)
     
     def initCenturalWidget(self):
         self.centuralLayout.setSpacing(20)
