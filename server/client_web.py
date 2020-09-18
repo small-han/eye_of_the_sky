@@ -14,9 +14,9 @@ nest_asyncio.apply()
 async def hello():
     uri = "ws://localhost:8765"
     async with websockets.connect(uri) as websocket:
-        greeting="hello"
-        await websocket.send(greeting)
-        print(greeting)
+        # greeting="hello"
+        # await websocket.send(greeting)
+        # print(greeting)
         
         img_name = "pic.png"  # 将客户端传输过来的图片名称（bytes）解码成字符串
         await websocket.send(img_name)

@@ -8,8 +8,8 @@ detect::detect()
         printf("failed to load image recognition network\n");
         return ;
     }
-    camera_left = gstCamera::Create("0");
-    camera_right = gstCamera::Create("1");
+    camera_left = gstCamera::Create(720,480,"0");
+    camera_right = gstCamera::Create(720,480,"1");
     imgRGBA_left = NULL;
     imgRGBA_right = NULL;
 }

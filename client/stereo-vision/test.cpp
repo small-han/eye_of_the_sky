@@ -26,7 +26,7 @@ int main()
     cv::Mat imOut, lo;
     stereovis::calibracao c(imLeft, imRight);
     c.iniciaCalibracaoCamera();
-    // c.recitify(imLeft, imRight, imOut);
+    c.recitify(imLeft, imRight, imOut);
     // imshow("Recitied",imOut);
     // auto key=waitKey(0);
     stereovis::disparidade d(imLeft, imRight);

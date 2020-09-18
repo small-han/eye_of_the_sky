@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sun Aug  2 15:47:16 2020
-
 @author:hp
 """
 
@@ -13,10 +12,11 @@ import sys
 from PyQt5 import QtWidgets,QtGui
 import pandas as pd
 
+import asyncio
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-
+import websockets
 import numpy as np
 import pandas as pd
 import sys
@@ -26,17 +26,41 @@ import os
 import random
 import string
 
+async def trans(websocket, path):
+    print("web start")
+    while True:
+        # BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'pics')
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        #文件名
+        filename = await websocket.recv()
+        print(filename)
+        #文件大小
+        filesize = await websocket.recv()
+        filesize = int(filesize)
+        print(filesize)
+        
+        path = os.path.join(BASE_DIR, filename)
+        f = open(path, 'wb') 
+        #接收文件
+        data =await websocket.recv() 
+        f.write(data)
+        f.close()  
+        trigger.emit(str(time.time()))
+        print("receive successfully!")
 
 class SocketServer(QThread):
     trigger = pyqtSignal(str)
     def __int__(self):
         super(QThread, self).__init__()
 
+   
     def run(self):
-        while 1:
-            time.sleep(1)
-            # receive data
-            self.trigger.emit(str(time.time()))
+        print('run')
+        
+        start_server = websockets.serve(trans, "localhost", 8765)
+        asyncio.get_event_loop().run_until_complete(start_server)
+        asyncio.get_event_loop().run_forever()
+        # self.trigger.emit(str(time.time()))
 
 class Server():
     def __init__(self,IP,port,DIR):
@@ -72,6 +96,7 @@ class Server():
 
 
     def setDataLayout(self):
+        print('UI')
         self.picLabel = QLabel()
         self.picLabel.setPixmap(QPixmap('pics/pic.jpeg'))
         self.picLabel.setAlignment(Qt.AlignCenter)
@@ -79,8 +104,8 @@ class Server():
         self.picLabel.setMinimumHeight(500)
         self.dataLayout.addWidget(self.picLabel)
         self.table.horizontalHeader().setFixedHeight(50) ##设置表头高度
-        self.table.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)#设置第五列宽度自动调整，充满屏幕
-        self.table.horizontalHeader().setStretchLastSection(True) ##设置最后一列拉伸至最大[]
+        # self.table.horizontalHeader().setSectionResizeMode(3, QHeaderView.Stretch)#设置第五列宽度自动调整，充满屏幕
+        # self.table.horizontalHeader().setStretchLastSection(True) ##设置最后一列拉伸至最大[]
         # table.setSelectionMode(QAbstractItemView.SingleSelection) #设置只可以单选，可以使用ExtendedSelection进行多选
         # table.setSelectionBehavior(QAbstractItemView.SelectRows) #设置 不可选择单个单元格，只可选择一行。
         # self.table.horizontalHeader().resizeSection(0,200) #设置第一列的宽度为200
@@ -166,9 +191,9 @@ class Server():
 
     def updatePic(self):
         if random.randint(1,100)%2==0:
-            self.picLabel.setPixmap(QPixmap('pics/pic.png'))
-        else:
             self.picLabel.setPixmap(QPixmap('pics/pic.jpeg'))
+        else:
+            self.picLabel.setPixmap(QPixmap('pics/pic.png'))
             
     def refreshUI(self):
         self.update_data()
@@ -199,7 +224,7 @@ class Server():
         return result_str
 
 if __name__ == "__main__":
-    IP = "127.0.0.1"
+    IP = "localhost"
     port = 6669
     DIR = os.path.dirname(os.path.abspath(__file__))
     server = Server(IP,port,DIR)
