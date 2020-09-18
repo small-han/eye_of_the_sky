@@ -13,7 +13,7 @@ class Send:
         self.IP=IP
         self.port=port
     
-    def send_data(self):
+    def send_data(self):        
         conn = socket.socket()  # 声明socket类型，同时生成socket连接对象
         conn.connect((self.IP,self.port))  # 链接服务器的ip + 端口
         print("connected!")
@@ -41,6 +41,6 @@ class Send:
         
         
 IP="localhost"
-port=6664
+port=6668
 sen=Send(IP,port)
 sen.send_data()
