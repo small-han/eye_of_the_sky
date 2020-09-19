@@ -27,16 +27,29 @@ import asyncio
 import websockets
 from PyQt5.QtCore import pyqtSignal
 
+
 client_ip="localhost"
 client_port=6668
 server_ip="localhost"
 server_port=6668
 
+
 class SocketServer(QThread):
     trigger = pyqtSignal(str)
+    
+    
+    
     def __int__(self):
         super(QThread, self).__init__()
-
+        self.client_ip=client_ip
+        self.client_port=client_port
+        self.server_ip=server_ip
+        self.server_port=server_port
+        
+        self.client_ip.client_ip_trigger.connect(self.edit_client_ip)
+        self.client_port.client_port_trigger.connect(self.edit_client_port)
+        self.server_ip.server_ip_trigger.connect(self.edit_server_ip)
+        self.server_port.server_port_trigger.connect(self.edit_server_poet)
     def run(self):
         print('run')
         while(1):
@@ -78,9 +91,21 @@ class SocketServer(QThread):
                 print("recv:", data.decode())
             self.trigger.emit(str(time.time()))
             server.close()
-        
+    
+    def edit_client_ip(self,ip):
+        self.client_ip=ip
+    def edit_client_port(self,port):
+        self.client_port=port
+    def edit_server_ip(self,ip):
+        self.client_ip=ip
+    def edit_server_port(self,port):
+        self.server_port=port
 
 class Server():
+    client_ip_trigger=pyqtSignal(str)
+    client_port_trigger=pyqtSignal(int)
+    server_ip_trigger=pyqtSignal(str)
+    server_port_trigger=pyqtSignal(int)
     def __init__(self):#,IP,port,DIR):
         self.app = QApplication(sys.argv)
 
