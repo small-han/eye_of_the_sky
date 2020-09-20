@@ -49,7 +49,7 @@ class SocketServer(QThread):
         self.client_ip.client_ip_trigger.connect(self.edit_client_ip)
         self.client_port.client_port_trigger.connect(self.edit_client_port)
         self.server_ip.server_ip_trigger.connect(self.edit_server_ip)
-        self.server_port.server_port_trigger.connect(self.edit_server_poet)
+        self.server_port.server_port_trigger.connect(self.edit_server_port)
     def run(self):
         print('run')
         while(1):
